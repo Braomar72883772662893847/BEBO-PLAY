@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bebo Play — المتجر</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Bebo Play</div>
+    <div class="auth">
+      <button id="btn-show-login">تسجيل / دخول</button>
+      <button id="btn-show-dev-register">سجّل كمطوّر</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="controls">
+      <input id="searchInput" placeholder="ابحث عن تطبيق..." />
+      <select id="categorySelect"><option value="all">الكل</option></select>
+      <button id="btn-my-apps" class="hidden">تطبيقاتي</button>
+    </section>
+
+    <section id="appsGrid" class="grid"></section>
+  </main>
+
+  <!-- MODALS -->
+  <!-- Login/Register Modal -->
+  <div id="modal-auth" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" data-target="modal-auth">✕</button>
+      <h3>تسجيل / دخول</h3>
+      <input id="authEmail" placeholder="البريد الإلكتروني" />
+      <input id="authPass" type="password" placeholder="كلمة المرور" />
+      <div class="row">
+        <button id="btnLogin">دخول</button>
+        <button id="btnRegister">تسجيل حساب</button>
+      </div>
+      <small id="authMsg" class="muted"></small>
+    </div>
+  </div>
+
+  <!-- Developer Registration Modal -->
+  <div id="modal-dev" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" data-target="modal-dev">✕</button>
+      <h3>سجل كمطوّر</h3>
+      <input id="devName" placeholder="الاسم الكامل" />
+      <input id="devEmail" placeholder="البريد الإلكتروني" />
+      <input id="devPhone" placeholder="رقم الهاتف" />
+      <input id="devPass" type="password" placeholder="كلمة المرور" />
+      <div class="row">
+        <button id="btnDevRegister">سجل كمطوّر</button>
+      </div>
+      <small class="muted">بعد التسجيل ستنتظر موافقة الأدمن لرفع التطبيقات.</small>
+    </div>
+  </div>
+
+  <!-- Upload App Modal (for approved developers) -->
+  <div id="modal-upload" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" data-target="modal-upload">✕</button>
+      <h3>رفع تطبيق جديد</h3>
+      <input id="appName" placeholder="اسم التطبيق" />
+      <input id="appCategory" placeholder="الفئة" />
+      <textarea id="appDesc" placeholder="وصف التطبيق"></textarea>
+      <input id="appApk" type="file" accept=".apk" />
+      <input id="appScreens" type="file" accept="image/*" multiple />
+      <div class="row">
+        <button id="btnUploadApp">رفع التطبيق</button>
+      </div>
+      <small class="muted">التطبيق سيانتظر موافقة الأدمن قبل الظهور للمستخدمين.</small>
+    </div>
+  </div>
+
+  <!-- App Detail Modal -->
+  <div id="modal-detail" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" data-target="modal-detail">✕</button>
+      <div id="detailBody"></div>
+    </div>
+  </div>
+
+  <footer>
+    <small>© <span id="year"></span> Bebo Play — منصة رفع وتحميل التطبيقات</small>
+  </footer>
+
+  <!-- Firebase SDKs (to be replaced by your config in app.js) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+
+  <script src="app.js"></script>
+</body>
+        </html>
