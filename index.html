@@ -1,77 +1,62 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bebo Play — تسجيل الدخول</title>
-  <link rel="stylesheet" href="style.css">
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-  <!-- Firebase v8 (بصيغة المتصفح لسهولة الإدماج) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
-</head>
-<body>
+<script>
+// ===== إعداد Firebase =====
+const firebaseConfig = {
+    apiKey: "AIzaSyExampleX1-xxxxx_yourKey",
+    authDomain: "bebo-play.firebaseapp.com",
+    projectId: "bebo-play",
+    storageBucket: "bebo-play.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abcd1234efgh5678"
+};
 
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo">B</div>
-      <div class="title-block">
-        <h1>Bebo Play</h1>
-        <div class="subtitle">متجر التطبيقات — سجّل للدخول</div>
-      </div>
-    </div>
-  </header>
+// تشغيل Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-  <main class="container">
+// تسجيل الدخول
+function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+            console.log("✅ تم تسجيل الدخول");
+        })
+        .catch(err => alert(err.message));
+}
 
-    <!-- شاشة التسجيل -->
-    <section id="authSection" class="card auth-card">
-      <h2>مرحباً — سجّل للدخول إلى Bebo Play</h2>
+// إنشاء حساب
+function signup() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(() => {
+            console.log("✅ تم إنشاء الحساب");
+        })
+        .catch(err => alert(err.message));
+}
 
-      <div class="auth-actions">
-        <button id="googleSign" class="btn primary">تسجيل دخول بجوجل</button>
-      </div>
+// تسجيل الخروج
+function logout() {
+    auth.signOut();
+}
 
-      <div class="divider">أو</div>
+// التحقق من حالة المستخدم
+auth.onAuthStateChanged(user => {
+    if (user) {
+        document.getElementById("login-page").style.display = "none";
+        document.getElementById("game-page").style.display = "block";
+    } else {
+        document.getElementById("login-page").style.display = "block";
+        document.getElementById("game-page").style.display = "none";
+    }
+});
 
-      <form id="emailForm" class="auth-form">
-        <input id="email" type="email" placeholder="البريد الإلكتروني" required />
-        <input id="password" type="password" placeholder="كلمة المرور" required />
-        <div class="row">
-          <button id="emailSign" type="submit" class="btn primary">تسجيل / تسجيل دخول</button>
-        </div>
-      </form>
-
-      <div id="authMsg" class="muted small"></div>
-    </section>
-
-    <!-- المحتوى بعد تسجيل الدخول -->
-    <section id="contentSection" class="hidden">
-      <div class="topbar">
-        <div>
-          <span id="userName" class="small"></span>
-        </div>
-        <div>
-          <button id="logoutBtn" class="btn subtle">تسجيل خروج</button>
-        </div>
-      </div>
-
-      <section class="hero">
-        <h2>ألعابي</h2>
-        <p>قائمة الألعاب متاحة للمستخدمين فقط.</p>
-      </section>
-
-      <section id="appsGrid" class="apps-grid"></section>
-    </section>
-
-  </main>
-
-  <footer class="site-footer">
-    © <span id="year"></span> Bebo Play
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+// فتح اللعبة
+function openGame(url) {
+    window.location.href = url;
+}
+</script>
