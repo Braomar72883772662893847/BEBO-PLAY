@@ -1,3 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Bebo Play</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f0f0f0;
+}
+.container {
+    margin-top: 100px;
+}
+input {
+    padding: 10px;
+    margin: 5px;
+    width: 200px;
+}
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+#game-page {
+    display: none;
+}
+</style>
+</head>
+<body>
+
+<div id="login-page" class="container">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="البريد الإلكتروني"><br>
+    <input type="password" id="password" placeholder="كلمة المرور"><br>
+    <button onclick="login()">دخول</button>
+    <button onclick="signup()">إنشاء حساب</button>
+</div>
+
+<div id="game-page" class="container">
+    <h2>مرحباً بك في Bebo Play 🎮</h2>
+    <button onclick="downloadGame('BeboRun.zip', 'BeboRun.zip')">📥 تحميل اللعبة</button>
+    <br>
+    <button onclick="logout()">تسجيل الخروج</button>
+</div>
+
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -55,8 +101,16 @@ auth.onAuthStateChanged(user => {
     }
 });
 
-// فتح اللعبة
-function openGame(url) {
-    window.location.href = url;
+// تنزيل اللعبة
+function downloadGame(url, fileName) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 </script>
+
+</body>
+</html>
