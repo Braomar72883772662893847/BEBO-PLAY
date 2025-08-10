@@ -1,97 +1,93 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Bebo Play — المتجر</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bebo Play — متجر الألعاب</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDK v8 (متوافق مع initializeApp) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">Bebo Play</div>
-    <div class="auth">
-      <button id="btn-show-login">تسجيل / دخول</button>
-      <button id="btn-show-dev-register">سجّل كمطوّر</button>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div class="title-block">
+        <h1>Bebo Play</h1>
+        <div class="subtitle">متجر التطبيقات والألعاب</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="search" placeholder="ابحث عن لعبة أو تطبيق..." />
+      <button id="openUpload" title="رفع تطبيق" class="btn subtle">رفع تطبيق</button>
     </div>
   </header>
 
-  <main>
-    <section class="controls">
-      <input id="searchInput" placeholder="ابحث عن تطبيق..." />
-      <select id="categorySelect"><option value="all">الكل</option></select>
-      <button id="btn-my-apps" class="hidden">تطبيقاتي</button>
+  <main class="container">
+    <section class="hero">
+      <h2>أحدث الألعاب والتطبيقات</h2>
+      <p>استعرض، اقرأ التفاصيل، وحمّل أو ابدأ اللعب بسهولة.</p>
     </section>
 
-    <section id="appsGrid" class="grid"></section>
+    <section id="appsGrid" class="apps-grid">
+      <!-- بطاقات التطبيقات تُملأ بواسطة script.js -->
+    </section>
   </main>
 
-  <!-- MODALS -->
-  <!-- Login/Register Modal -->
-  <div id="modal-auth" class="modal hidden">
-    <div class="modal-content">
-      <button class="close" data-target="modal-auth">✕</button>
-      <h3>تسجيل / دخول</h3>
-      <input id="authEmail" placeholder="البريد الإلكتروني" />
-      <input id="authPass" type="password" placeholder="كلمة المرور" />
-      <div class="row">
-        <button id="btnLogin">دخول</button>
-        <button id="btnRegister">تسجيل حساب</button>
+  <!-- مودال تفاصيل التطبيق -->
+  <div id="modal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-card">
+      <button id="closeModal" class="modal-close">&times;</button>
+      <img id="modalIcon" src="" alt="" class="modal-icon"/>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <div class="modal-meta">
+        <span id="modalSize"></span>
+        <span id="modalVersion"></span>
       </div>
-      <small id="authMsg" class="muted"></small>
-    </div>
-  </div>
-
-  <!-- Developer Registration Modal -->
-  <div id="modal-dev" class="modal hidden">
-    <div class="modal-content">
-      <button class="close" data-target="modal-dev">✕</button>
-      <h3>سجل كمطوّر</h3>
-      <input id="devName" placeholder="الاسم الكامل" />
-      <input id="devEmail" placeholder="البريد الإلكتروني" />
-      <input id="devPhone" placeholder="رقم الهاتف" />
-      <input id="devPass" type="password" placeholder="كلمة المرور" />
-      <div class="row">
-        <button id="btnDevRegister">سجل كمطوّر</button>
+      <div class="modal-actions">
+        <a id="modalDownload" class="btn primary" href="#" target="_blank" rel="noopener">تحميل</a>
+        <button id="modalPlay" class="btn ghost">ابدأ اللعب</button>
       </div>
-      <small class="muted">بعد التسجيل ستنتظر موافقة الأدمن لرفع التطبيقات.</small>
     </div>
   </div>
 
-  <!-- Upload App Modal (for approved developers) -->
-  <div id="modal-upload" class="modal hidden">
-    <div class="modal-content">
-      <button class="close" data-target="modal-upload">✕</button>
-      <h3>رفع تطبيق جديد</h3>
-      <input id="appName" placeholder="اسم التطبيق" />
-      <input id="appCategory" placeholder="الفئة" />
-      <textarea id="appDesc" placeholder="وصف التطبيق"></textarea>
-      <input id="appApk" type="file" accept=".apk" />
-      <input id="appScreens" type="file" accept="image/*" multiple />
-      <div class="row">
-        <button id="btnUploadApp">رفع التطبيق</button>
-      </div>
-      <small class="muted">التطبيق سيانتظر موافقة الأدمن قبل الظهور للمستخدمين.</small>
-    </div>
-  </div>
-
-  <!-- App Detail Modal -->
-  <div id="modal-detail" class="modal hidden">
-    <div class="modal-content">
-      <button class="close" data-target="modal-detail">✕</button>
-      <div id="detailBody"></div>
-    </div>
-  </div>
-
-  <footer>
-    <small>© <span id="year"></span> Bebo Play — منصة رفع وتحميل التطبيقات</small>
+  <footer class="site-footer">
+    © <span id="year"></span> Bebo Play — جميع الحقوق محفوظة
   </footer>
 
-  <!-- Firebase SDKs (to be replaced by your config in app.js) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+  <script src="script.js"></script>
 
-  <script src="app.js"></script>
+  <!-- Firebase config (ضع بيانات مشروعك هنا إذا اردت تغييرها) -->
+  <script>
+    // --- ضع هنا firebaseConfig الخاص بمشروعك أو اترك القيم الحالية ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCQtvbt1GlHXd28nlC-RPbq_yZ6u_G2n64",
+      authDomain: "bebo-b05dc.firebaseapp.com",
+      projectId: "bebo-b05dc",
+      storageBucket: "bebo-b05dc.appspot.com",
+      messagingSenderId: "118233736175",
+      appId: "1:118233736175:web:b69ff4a957a4cc2e068c1a",
+      measurementId: "G-7ET3513M93"
+    };
+
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    try {
+      firebase.analytics();
+    } catch (e) { console.warn('Analytics init failed', e); }
+
+    // تهيئة Firestore (إن وُجد)
+    let db = null;
+    try {
+      db = firebase.firestore();
+    } catch (e) { console.warn('Firestore not available', e); }
+  </script>
 </body>
-        </html>
+  </html>
