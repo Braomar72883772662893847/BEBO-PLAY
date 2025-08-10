@@ -3,91 +3,75 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bebo Play — متجر الألعاب</title>
-
+  <title>Bebo Play — تسجيل الدخول</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase SDK v8 (متوافق مع initializeApp) -->
+  <!-- Firebase v8 (بصيغة المتصفح لسهولة الإدماج) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
 </head>
 <body>
+
   <header class="site-header">
     <div class="brand">
       <div class="logo">B</div>
       <div class="title-block">
         <h1>Bebo Play</h1>
-        <div class="subtitle">متجر التطبيقات والألعاب</div>
+        <div class="subtitle">متجر التطبيقات — سجّل للدخول</div>
       </div>
-    </div>
-
-    <div class="controls">
-      <input id="search" placeholder="ابحث عن لعبة أو تطبيق..." />
-      <button id="openUpload" title="رفع تطبيق" class="btn subtle">رفع تطبيق</button>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero">
-      <h2>أحدث الألعاب والتطبيقات</h2>
-      <p>استعرض، اقرأ التفاصيل، وحمّل أو ابدأ اللعب بسهولة.</p>
+
+    <!-- شاشة التسجيل -->
+    <section id="authSection" class="card auth-card">
+      <h2>مرحباً — سجّل للدخول إلى Bebo Play</h2>
+
+      <div class="auth-actions">
+        <button id="googleSign" class="btn primary">تسجيل دخول بجوجل</button>
+      </div>
+
+      <div class="divider">أو</div>
+
+      <form id="emailForm" class="auth-form">
+        <input id="email" type="email" placeholder="البريد الإلكتروني" required />
+        <input id="password" type="password" placeholder="كلمة المرور" required />
+        <div class="row">
+          <button id="emailSign" type="submit" class="btn primary">تسجيل / تسجيل دخول</button>
+        </div>
+      </form>
+
+      <div id="authMsg" class="muted small"></div>
     </section>
 
-    <section id="appsGrid" class="apps-grid">
-      <!-- بطاقات التطبيقات تُملأ بواسطة script.js -->
+    <!-- المحتوى بعد تسجيل الدخول -->
+    <section id="contentSection" class="hidden">
+      <div class="topbar">
+        <div>
+          <span id="userName" class="small"></span>
+        </div>
+        <div>
+          <button id="logoutBtn" class="btn subtle">تسجيل خروج</button>
+        </div>
+      </div>
+
+      <section class="hero">
+        <h2>ألعابي</h2>
+        <p>قائمة الألعاب متاحة للمستخدمين فقط.</p>
+      </section>
+
+      <section id="appsGrid" class="apps-grid"></section>
     </section>
+
   </main>
 
-  <!-- مودال تفاصيل التطبيق -->
-  <div id="modal" class="modal hidden" role="dialog" aria-hidden="true">
-    <div class="modal-card">
-      <button id="closeModal" class="modal-close">&times;</button>
-      <img id="modalIcon" src="" alt="" class="modal-icon"/>
-      <h3 id="modalTitle"></h3>
-      <p id="modalDesc"></p>
-      <div class="modal-meta">
-        <span id="modalSize"></span>
-        <span id="modalVersion"></span>
-      </div>
-      <div class="modal-actions">
-        <a id="modalDownload" class="btn primary" href="#" target="_blank" rel="noopener">تحميل</a>
-        <button id="modalPlay" class="btn ghost">ابدأ اللعب</button>
-      </div>
-    </div>
-  </div>
-
   <footer class="site-footer">
-    © <span id="year"></span> Bebo Play — جميع الحقوق محفوظة
+    © <span id="year"></span> Bebo Play
   </footer>
 
   <script src="script.js"></script>
-
-  <!-- Firebase config (ضع بيانات مشروعك هنا إذا اردت تغييرها) -->
-  <script>
-    // --- ضع هنا firebaseConfig الخاص بمشروعك أو اترك القيم الحالية ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyCQtvbt1GlHXd28nlC-RPbq_yZ6u_G2n64",
-      authDomain: "bebo-b05dc.firebaseapp.com",
-      projectId: "bebo-b05dc",
-      storageBucket: "bebo-b05dc.appspot.com",
-      messagingSenderId: "118233736175",
-      appId: "1:118233736175:web:b69ff4a957a4cc2e068c1a",
-      measurementId: "G-7ET3513M93"
-    };
-
-    // تهيئة Firebase
-    firebase.initializeApp(firebaseConfig);
-    try {
-      firebase.analytics();
-    } catch (e) { console.warn('Analytics init failed', e); }
-
-    // تهيئة Firestore (إن وُجد)
-    let db = null;
-    try {
-      db = firebase.firestore();
-    } catch (e) { console.warn('Firestore not available', e); }
-  </script>
 </body>
-  </html>
+</html>
