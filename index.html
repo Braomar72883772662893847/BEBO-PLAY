@@ -1,116 +1,93 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>Bebo Play</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: #f0f0f0;
-}
-.container {
-    margin-top: 100px;
-}
-input {
-    padding: 10px;
-    margin: 5px;
-    width: 200px;
-}
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    cursor: pointer;
-}
-#game-page {
-    display: none;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bebo Play — متجر الألعاب</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDK v8 (متوافق مع initializeApp) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
 <body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div class="title-block">
+        <h1>Bebo Play</h1>
+        <div class="subtitle">متجر التطبيقات والألعاب</div>
+      </div>
+    </div>
 
-<div id="login-page" class="container">
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="email" placeholder="البريد الإلكتروني"><br>
-    <input type="password" id="password" placeholder="كلمة المرور"><br>
-    <button onclick="login()">دخول</button>
-    <button onclick="signup()">إنشاء حساب</button>
-</div>
+    <div class="controls">
+      <input id="search" placeholder="ابحث عن لعبة أو تطبيق..." />
+      <button id="openUpload" title="رفع تطبيق" class="btn subtle">رفع تطبيق</button>
+    </div>
+  </header>
 
-<div id="game-page" class="container">
-    <h2>مرحباً بك في Bebo Play 🎮</h2>
-    <button onclick="downloadGame('BeboRun.zip', 'BeboRun.zip')">📥 تحميل اللعبة</button>
-    <br>
-    <button onclick="logout()">تسجيل الخروج</button>
-</div>
+  <main class="container">
+    <section class="hero">
+      <h2>أحدث الألعاب والتطبيقات</h2>
+      <p>استعرض، اقرأ التفاصيل، وحمّل أو ابدأ اللعب بسهولة.</p>
+    </section>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <section id="appsGrid" class="apps-grid">
+      <!-- بطاقات التطبيقات تُملأ بواسطة script.js -->
+    </section>
+  </main>
 
-<script>
-// ===== إعداد Firebase =====
-const firebaseConfig = {
-    apiKey: "AIzaSyExampleX1-xxxxx_yourKey",
-    authDomain: "bebo-play.firebaseapp.com",
-    projectId: "bebo-play",
-    storageBucket: "bebo-play.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcd1234efgh5678"
-};
+  <!-- مودال تفاصيل التطبيق -->
+  <div id="modal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-card">
+      <button id="closeModal" class="modal-close">&times;</button>
+      <img id="modalIcon" src="" alt="" class="modal-icon"/>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <div class="modal-meta">
+        <span id="modalSize"></span>
+        <span id="modalVersion"></span>
+      </div>
+      <div class="modal-actions">
+        <a id="modalDownload" class="btn primary" href="#" target="_blank" rel="noopener">تحميل</a>
+        <button id="modalPlay" class="btn ghost">ابدأ اللعب</button>
+      </div>
+    </div>
+  </div>
 
-// تشغيل Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+  <footer class="site-footer">
+    © <span id="year"></span> Bebo Play — جميع الحقوق محفوظة
+  </footer>
 
-// تسجيل الدخول
-function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-            console.log("✅ تم تسجيل الدخول");
-        })
-        .catch(err => alert(err.message));
-}
+  <script src="script.js"></script>
 
-// إنشاء حساب
-function signup() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(() => {
-            console.log("✅ تم إنشاء الحساب");
-        })
-        .catch(err => alert(err.message));
-}
+  <!-- Firebase config (ضع بيانات مشروعك هنا إذا اردت تغييرها) -->
+  <script>
+    // --- ضع هنا firebaseConfig الخاص بمشروعك أو اترك القيم الحالية ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCQtvbt1GlHXd28nlC-RPbq_yZ6u_G2n64",
+      authDomain: "bebo-b05dc.firebaseapp.com",
+      projectId: "bebo-b05dc",
+      storageBucket: "bebo-b05dc.appspot.com",
+      messagingSenderId: "118233736175",
+      appId: "1:118233736175:web:b69ff4a957a4cc2e068c1a",
+      measurementId: "G-7ET3513M93"
+    };
 
-// تسجيل الخروج
-function logout() {
-    auth.signOut();
-}
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    try {
+      firebase.analytics();
+    } catch (e) { console.warn('Analytics init failed', e); }
 
-// التحقق من حالة المستخدم
-auth.onAuthStateChanged(user => {
-    if (user) {
-        document.getElementById("login-page").style.display = "none";
-        document.getElementById("game-page").style.display = "block";
-    } else {
-        document.getElementById("login-page").style.display = "block";
-        document.getElementById("game-page").style.display = "none";
-    }
-});
-
-// تنزيل اللعبة
-function downloadGame(url, fileName) {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-</script>
-
+    // تهيئة Firestore (إن وُجد)
+    let db = null;
+    try {
+      db = firebase.firestore();
+    } catch (e) { console.warn('Firestore not available', e); }
+  </script>
 </body>
 </html>
